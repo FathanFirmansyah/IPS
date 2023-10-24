@@ -35,7 +35,7 @@ def scan_wifi_rssi(ssid, output_file):
 
 if __name__ == "__main__":
     target_ssid = input("Masukkan nama SSID jaringan WiFi yang ingin Anda monitor: ")
-    output_file = "output3.txt"  # Ganti dengan nama file yang Anda inginkan
+    output_file = "tes.txt"  # Ganti dengan nama file yang Anda inginkan
 
     try:
         while True:
