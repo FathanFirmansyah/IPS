@@ -1,0 +1,17 @@
+25 Oktober 2023 / 08:00
+
+Detail Laptop yang digunakan:
+MSI GL65 Leopard 10SDK, Inter Core i7 10750H
+Intel(R) Wi-Fi 6 AX201 160MHz
+
+
+Tinggi Wifi: 203cm
+Tinggi Laptop: 18.5cm
+Jarak pengujian antara dekstop dan WiFi adalah 1,2,3,5 meter
+Terdapat TV disamping WiFi
+Tidak ada device lain yang terkoneksi WiFi selain Desktop yang digunakan
+
+reference_rssi = -30 #RSSI pada jarak referensi 1 Meter (dalam dBm)
+20 data diambil setiap pengujian
+Total data: 20x4: 80 data (RSSI 80, No Filter 80, Kalman Filter 80)
+

@@ -60,9 +60,9 @@ def scan_wifi_rssi(ssid, outputRSSI, outputNonFilter, outputKalmanFilter):
 
 if __name__ == "__main__":
     target_ssid = input("Masukkan nama SSID jaringan WiFi yang ingin Anda monitor: ")
-    outputRSSI = "outputRSSI.txt"  # Ganti dengan nama file yang Anda inginkan
-    outputNonFilter = "outputNF.txt"  # Ganti dengan nama file yang Anda inginkan
-    outputKalmanFilter = "outputKF.txt"  # Ganti dengan nama file yang Anda inginkan
+    outputRSSI = "outputRSSI1.txt"  # Ganti dengan nama file yang Anda inginkan
+    outputNonFilter = "outputNF1.txt"  # Ganti dengan nama file yang Anda inginkan
+    outputKalmanFilter = "outputKF1.txt"  # Ganti dengan nama file yang Anda inginkan
 
     try:
         scan_wifi_rssi(target_ssid, outputRSSI, outputNonFilter, outputKalmanFilter)

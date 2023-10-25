@@ -1,0 +1,21 @@
+NonFilter=2.00 meter
+NonFilter=2.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+NonFilter=1.00 meter
+
