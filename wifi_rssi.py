@@ -5,14 +5,16 @@ from filterpy.kalman import KalmanFilter
 import numpy as np
 
 # Parameter-parameter untuk Model Path Loss
-reference_rssi = -30  # RSSI pada jarak referensi (dalam dBm)
-n = 2.0  # Path Loss Exponent (biasanya berkisar antara 2.0 hingga 4.0)
+reference_rssi = -29  # RSSI pada jarak referensi (dalam dBm)
+n = 2.5  # Path Loss Exponent (biasanya berkisar antara 2.0 hingga 4.0)
 
 # Inisialisasi Filter Kalman
 kf = KalmanFilter(dim_x=1, dim_z=1)
 kf.x = np.array([reference_rssi])  # Inisialisasi nilai RSSI awal
 kf.F = np.array([[1.0]])  # Matriks transisi
 kf.H = np.array([[1.0]])  # Matriks pengukuran
+kf.R = 5  # Kovariansi pengukuran (dalam contoh ini, disesuaikan dengan skala pengukuran)
+kf.P = np.eye(1)  # Matriks kovariansi awal (dalam contoh ini, matriks identitas)
 
 def calculate_distanceKalman(rssi):
     # Update Filter Kalman dengan pengukuran RSSI
@@ -29,12 +31,13 @@ def calculate_distance(rssi):
     distance = 10 ** ratio
     return distance
 
-def scan_wifi_rssi(ssid, outputRSSI, outputNonFilter, outputKalmanFilter):
+def scan_wifi_rssi(ssid, outputRSSI, outputNonFilter, outputKalmanFilter, max_data):
     wifi = pywifi.PyWiFi()
     iface = wifi.interfaces()[0]  # Menggunakan antarmuka pertama (biasanya wlan0)
 
+    data_count = 0  # Inisialisasi hitungan data yang diambil
     try:
-        while True:
+        while data_count < max_data:
             iface.scan()
             time.sleep(2)
             scan_results = iface.scan_results()
@@ -51,20 +54,27 @@ def scan_wifi_rssi(ssid, outputRSSI, outputNonFilter, outputKalmanFilter):
                     with open(outputKalmanFilter, "a") as file:
                         file.write(f"KalmanFilter={distanceKalman:.2f} meter\n")
                     print(f"{ssid}: RSSI={rssi} dBm, Jarak={distanceKalman:.2f} meter")
+                    
+                    data_count += 1  # Menambah jumlah data yang diambil
+                    
+                    if data_count >= max_data:
+                        print(f"Pengambilan Data Selesai")
                     break
+
             else:
                 print(f"Tidak dapat menemukan {ssid}")
-            time.sleep(2)  # Interval cek setiap 3 detik
+            time.sleep(2)  # Interval cek setiap 2 detik
     except KeyboardInterrupt:
         print("Dihentikan oleh pengguna (Ctrl+C)")
 
 if __name__ == "__main__":
-    target_ssid = input("Masukkan nama SSID jaringan WiFi yang ingin Anda monitor: ")
+    target_ssid = "Ruijie"
     outputRSSI = "outputRSSI1.txt"  # Ganti dengan nama file yang Anda inginkan
     outputNonFilter = "outputNF1.txt"  # Ganti dengan nama file yang Anda inginkan
     outputKalmanFilter = "outputKF1.txt"  # Ganti dengan nama file yang Anda inginkan
+    max_data = 30
 
     try:
-        scan_wifi_rssi(target_ssid, outputRSSI, outputNonFilter, outputKalmanFilter)
+        scan_wifi_rssi(target_ssid, outputRSSI, outputNonFilter, outputKalmanFilter, max_data)
     except Exception as e:
         print(f"Terjadi kesalahan: {e}")
