@@ -6,7 +6,7 @@ import numpy as np
 
 # Parameter-parameter untuk Model Path Loss
 reference_rssi = -29  # RSSI pada jarak referensi (dalam dBm)
-n = 2.0  # Path Loss Exponent (biasanya berkisar antara 2.0 hingga 4.0)
+n = 2.5  # Path Loss Exponent (biasanya berkisar antara 2.0 hingga 4.0)
 
 # Inisialisasi Filter Kalman
 kf = KalmanFilter(dim_x=1, dim_z=1)
