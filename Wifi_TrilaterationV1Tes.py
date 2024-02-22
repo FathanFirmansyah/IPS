@@ -1,33 +1,56 @@
-import math
+import numpy as np
 
-def trilaterate(beacons, distances):
-    """
-    Trilateration untuk menentukan posisi pengguna berdasarkan jarak yang diterima dari beberapa beacon.
-    
-    Args:
-        beacons (list): List koordinat beacon dalam format (x, y).
-        distances (list): List jarak antara pengguna dan masing-masing beacon.
-    
-    Returns:
-        tuple: Koordinat perkiraan posisi pengguna dalam format (x, y).
-    """
-    x1, y1 = beacons[0]  # Koordinat beacon A
-    x2, y2 = beacons[1]  # Koordinat beacon B
-    x3, y3 = beacons[2]  # Koordinat beacon C
-    d1, d2, d3 = distances  # Jarak dari pengguna ke masing-masing beacon
-    
-    # Hitung posisi perkiraan pengguna
-    x = (d1**2 - d2**2 + x2**2 - x1**2 + y2**2 - y1**2) / (2 * (x2 - x1))
-    y = (d1**2 - d3**2 + x3**2 - x1**2 + y3**2 - y1**2) / (2 * (y3 - y1))
-    
-    return x, y
+# Define the points and distances
+P1 = np.array([2, 0])
+P2 = np.array([8, 0])
+P3 = np.array([4, 10])
 
-# Definisikan koordinat beacon dan jarak-jaraknya
-beacons = [(2, 0), (5, 1), (1, 5)]
-distances = [4, 4, 3]
+DistA = 6
+DistB = 6
+DistC = 6
 
-# Hitung posisi perkiraan pengguna
-user_position = trilaterate(beacons, distances)
-print("Posisi pengguna perkiraan:", user_position)
+# Calculate ex
+ex = (P2 - P1) / np.linalg.norm(P2 - P1)
 
+# Calculate p3p1
+p3p1 = P3 - P1
 
+# Calculate ival
+ival = np.dot(ex, p3p1)
+
+# Calculate ey
+ey = (P3 - P1 - ival * ex) / np.linalg.norm(P3 - P1 - ival * ex)
+
+# Calculate ez
+if len(P1) == 2:
+    ez = np.array([0, 0])
+else:
+    ez = np.cross(ex, ey)
+
+# Calculate d
+d = np.linalg.norm(P2 - P1)
+
+# Calculate j
+jval = np.dot(ey, p3p1)
+
+# Calculate x
+xval = (DistA**2 - DistB**2 + d**2) / (2 * d)
+
+# Calculate y
+yval = ((DistA**2 - DistC**2 + ival**2 + jval**2) / (2 * jval)) - (ival / jval) * xval
+
+# Calculate z
+zval = np.sqrt(DistA**2 - xval**2 - yval**2) if len(P1) == 3 else 0
+
+# Calculate triPt
+triPt = P1 + xval * ex + yval * ey + zval * ez
+
+print("ex:", ex)
+print("i:", ival)
+print("ey:", ey)
+print("d:", d)
+print("j:", jval)
+print("x:", xval)
+print("y:", yval)
+print("z:", zval)
+print("final result:", triPt)
