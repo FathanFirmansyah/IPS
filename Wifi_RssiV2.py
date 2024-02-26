@@ -64,7 +64,7 @@ def scan_wifi_rssi(ssid, outputRSSI, outputKalmanFilter, max_data, stop_event):
 
 if __name__ == "__main__":
     target_ssids = ["RuijieAP1", "RuijieAP2","RuijieAP3"]  # Ganti dengan daftar SSID yang ingin Anda lacak
-    max_data = 5
+    max_data = 30
 
     # Event untuk menghentikan proses jika SSID tidak ditemukan
     stop_event = Event()

@@ -52,12 +52,12 @@ def trilaterasi(P1, P2, P3, DistA, DistB, DistC):
     return triPt
 
 # Contoh penggunaan:
-P1 = np.array([5, 3])
-P2 = np.array([12, 5])
-P3 = np.array([4, 10])
-DistA = 6
-DistB = 6
-DistC = 6
+P1 = np.array([0, 0])
+P2 = np.array([0, -6.3])
+P3 = np.array([5, -6])
+DistA = 1.7
+DistB = 5
+DistC = 7.3
 
 titik_tidak_diketahui = trilaterasi(P1, P2, P3, DistA, DistB, DistC)
 print("Koordinat titik yang tidak diketahui:", titik_tidak_diketahui)

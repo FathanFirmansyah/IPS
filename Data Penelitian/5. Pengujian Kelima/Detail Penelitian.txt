@@ -1,0 +1,38 @@
+26 Februari 2023 / 19:00
+
+Detail Laptop yang digunakan:
+MSI GL65 Leopard 10SDK, Inter Core i7 10750H
+Intel(R) Wi-Fi 6 AX201 160MHz
+
+Detail Access Point yang digunakan:
+Ruijie RG-EW1200
+Jaringan 2.4Ghz
+
+Tinggi Wifi: 0cm
+Tinggi Laptop: 47cm
+
+reference_rssi = -29 #RSSI pada jarak referensi 1 Meter (dalam dBm)
+30 data diambil setiap pengujian
+Total data: 30x4: 120 data (RSSI 120, No Filter 80, Kalman Filter 80)
+
+Bentuk Ruangan:
+            3,39m
+        ---------------
+        - AP1   *     -
+        -             - 2,5m
+        -             -
+        -             -   2,5m
+        -       *      -----------
+        -			-
+6,37m   -  		        -
+        -			-
+        -       *        *      - 3,87m
+        -	                -
+        -		        -
+        - AP2		    AP3 -
+        -------------------------
+                  5,89m
+
+Nb: 
++ * adalah lokasi titik pengujian
++ Pengujian ditambah dengan dilakukan berjalan 1 langkah kedepan setelah 5 detik
