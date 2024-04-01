@@ -81,8 +81,10 @@ def scan_wifi_rssi(ssid, outputRSSI, outputKalmanFilter, max_data, stop_event):
                     print(f"{ssid}: RSSI={rssi} dBm, Jarak={distanceKalman:.2f} meter")
                     
                     data_count += 1  # Menambah jumlah data yang diambil
+                    
                     beacons.append(result.pos)  # Menambah koordinat beacon
                     distances.append(distanceKalman)  # Menambah jarak
+
                     if data_count >= max_data:
                         print(f"Pengambilan Data Selesai")
                     break
@@ -91,12 +93,11 @@ def scan_wifi_rssi(ssid, outputRSSI, outputKalmanFilter, max_data, stop_event):
                 stop_event.set()  # Set stop_event jika SSID tidak ditemukan
                 break
 
-            time.sleep(2)  # Interval cek setiap 2 detik
-            
         # Jika semua data telah dikumpulkan, lakukan trilaterasi
         if len(beacons) == max_data:
             user_position = trilaterate(beacons, distances)
             print(f"Posisi perkiraan pengguna untuk SSID {ssid}: {user_position}")
+    
     except KeyboardInterrupt:
         print("Dihentikan oleh pengguna (Ctrl+C)")
 

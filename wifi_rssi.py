@@ -68,11 +68,11 @@ def scan_wifi_rssi(ssid, outputRSSI, outputNonFilter, outputKalmanFilter, max_da
         print("Dihentikan oleh pengguna (Ctrl+C)")
 
 if __name__ == "__main__":
-    target_ssid = "Ruijie"
+    target_ssid = "TES"
     outputRSSI = "outputRSSI1.txt"  # Ganti dengan nama file yang Anda inginkan
     outputNonFilter = "outputNF1.txt"  # Ganti dengan nama file yang Anda inginkan
     outputKalmanFilter = "outputKF1.txt"  # Ganti dengan nama file yang Anda inginkan
-    max_data = 30
+    max_data = 100
 
     try:
         scan_wifi_rssi(target_ssid, outputRSSI, outputNonFilter, outputKalmanFilter, max_data)

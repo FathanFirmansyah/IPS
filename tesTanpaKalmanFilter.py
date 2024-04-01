@@ -17,7 +17,7 @@ def scan_wifi_rssi(ssid, output_file):
     try:
         while True:
             iface.scan()
-            time.sleep(2)
+            time.sleep(1)
             scan_results = iface.scan_results()
 
             for result in scan_results:
@@ -29,12 +29,11 @@ def scan_wifi_rssi(ssid, output_file):
                     return rssi
 
             print(f"Tidak dapat menemukan {ssid}")
-            time.sleep(2)  # Interval cek setiap 2 detik
     except Exception as e:
         print(f"Terjadi kesalahan: {e}")
 
 if __name__ == "__main__":
-    target_ssid = input("Masukkan nama SSID jaringan WiFi yang ingin Anda monitor: ")
+    target_ssid = "TES"
     output_file = "output.txt"  # Ganti dengan nama file yang Anda inginkan
 
     try:
