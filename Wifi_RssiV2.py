@@ -62,7 +62,7 @@ def scan_wifi_rssi(ssid, outputRSSI, outputKalmanFilter, max_data, stop_event):
         print("Dihentikan oleh pengguna (Ctrl+C)")
 
 if __name__ == "__main__":
-    target_ssids = ["RuijieAP2"]  # Ganti dengan daftar SSID yang ingin Anda lacak
+    target_ssids = ["RuijieAP3"]  # Ganti dengan daftar SSID yang ingin Anda lacak
     max_data = 100
 
     # Event untuk menghentikan proses jika SSID tidak ditemukan
@@ -70,8 +70,8 @@ if __name__ == "__main__":
 
     processes = []
     for ssid in target_ssids:
-        outputRSSI = f"outputRSSI_{ssid}_2.txt"
-        outputKalmanFilter = f"outputKF_{ssid}_2.txt"
+        outputRSSI = f"outputRSSI_{ssid}.txt"
+        outputKalmanFilter = f"outputKF_{ssid}.txt"
         process = Process(target=scan_wifi_rssi, args=(ssid, outputRSSI, outputKalmanFilter, max_data, stop_event))
         processes.append(process)
         process.start()
