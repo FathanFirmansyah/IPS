@@ -1,28 +1,26 @@
 import numpy as np
 
-# Initialize the filter with an initial estimate of the position and the associated uncertainty (covariance)
-x_estimated = 0
-P_estimated = 1
+reference_rssi_dict = {
+    "RuijieAP1": -31.24,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "RuijieAP2": -28.80,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP3": -32.70,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
+    "UIIConnect": -31.24,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "eduroam": -28.80,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+}
 
-# Define the velocity and the process noise
-velocity = 1
-process_noise = 0.1
+n_dict = {
+    "RuijieAP1": 1.75,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "RuijieAP2": 1.75,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP3": 1.6,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
+    "UIIConnect": -31.24,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "eduroam": -28.80,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+}
 
-# Define the measurement noise
-measurement_noise = 0.1
+ssid = "RuijieAP2"
+ssidN = "RuijieAP2"
+RSSI = -31
 
-for i in range(10):
-    # Generate a measurement with some random noise
-    measurement = i + np.random.normal(0, measurement_noise)
-
-    # Prediction step
-    x_predicted = x_estimated + velocity
-    P_predicted = P_estimated + process_noise
-
-    # Correction step
-    Kf = P_predicted / (P_predicted + measurement_noise)
-    x_estimated = x_predicted + Kf * (measurement - x_predicted)
-    P_estimated = (1 - Kf) * P_predicted
-
-    # Print the estimated position
-    print("Estimated position: ", x_estimated)
+A = reference_rssi_dict[ssid]
+n = n_dict[ssidN]
+d = 10 ** ((A - RSSI) / (10 * n))
+print (d)
