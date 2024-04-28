@@ -3,7 +3,7 @@ import pywifi
 import math
 from filterpy.kalman import KalmanFilter
 import numpy as np
-from multiprocessing import Process, Event
+from multiprocessing import Process, Event, Queue
 
 reference_rssi_dict = {
     "RuijieAP1": -31.24,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
@@ -34,7 +34,7 @@ kf.H = np.array([[1.0]])  # Matriks pengukuran
 kf.R = 5  # Kovariansi pengukuran (dalam contoh ini, disesuaikan dengan skala pengukuran)
 kf.P = np.eye(1)  # Matriks kovariansi awal (dalam contoh ini, matriks identitas)
 
-def calculate_distanceKalman(rssi, ssid, ssidN):
+def calculate_distanceKalman(rssi, ssid, ssidN, data_count):
     """
     Calculate the distance based on RSSI, reference RSSI (A), and path loss exponent (n).
     
@@ -49,7 +49,8 @@ def calculate_distanceKalman(rssi, ssid, ssidN):
     # Update Filter Kalman dengan pengukuran RSSI
     reference_rssi = reference_rssi_dict[ssid]
     n = n_dict[ssidN]
-    kf.x = np.array([reference_rssi])
+    if data_count == 0:
+        kf.x = np.array([reference_rssi])
     kf.predict()
     kf.update(np.array([rssi]))
 
@@ -110,7 +111,7 @@ def trilateration(xAP1,yAP1,rAP1,xAP2,yAP2,rAP2,xAP3,yAP3,rAP3):
     y = (C*D - A*F) / (B*D - A*E)
     return x,y
 
-def scan_wifi_rssi(ssid, outputRSSI, outputJarak, outputKalmanFilter, outputN, max_data, stop_event):
+def scan_wifi_rssi(ssid, outputRSSI, outputJarak, outputKalmanFilter, outputN, max_data, stop_event, result_queue):
     wifi = pywifi.PyWiFi()
     iface = wifi.interfaces()[0]  # Menggunakan antarmuka pertama (biasanya wlan0)
 
@@ -134,7 +135,7 @@ def scan_wifi_rssi(ssid, outputRSSI, outputJarak, outputKalmanFilter, outputN, m
                     rssi = result.signal
                     with open(outputRSSI, "a") as file:
                         file.write(f"RSSI {ssid} = {rssi} dBm\n")
-                    print(f"{data_count}.RSSI {ssid} = {rssi} dBm")
+                    print(f"{data_count+1}.RSSI {ssid} = {rssi} dBm")
 
                     # Fungsi Calculate Path Loss Exponent
                     # nValue = calculate_path_loss_exponent(rssi,ssid,4.00)
@@ -149,28 +150,28 @@ def scan_wifi_rssi(ssid, outputRSSI, outputJarak, outputKalmanFilter, outputN, m
                     # print(f"Jarak {ssid} = {distance} meter")
 
                     # Fungsi untuk menghitung jarak device ke AP yang sudah menggunakan kalman filter
-                    distanceKalman = calculate_distanceKalman(rssi, ssid, ssid)
+                    distanceKalman = calculate_distanceKalman(rssi, ssid, ssid, data_count)
                     with open(outputKalmanFilter, "a") as file:
-                        file.write(f"KF {ssid} = {distanceKalman:.2f} meter\n")
-                    print(f"KF {ssid} = {distanceKalman:.2f} meter")
+                        file.write(f"KF {ssid} = {distanceKalman:.4f} meter\n")
+                    print(f"KF {ssid} = {distanceKalman:.4f} meter")
 
                     # # Menambahkan posisi beacon sesuai dengan SSID
                     # beacons.append(beacon_positions[ssid])
                     # # Menambah jarak
                     distances.append(distanceKalman)
-                    print(distances)
                     
                     data_count += 1  # Menambah jumlah data yang diambil
                     
                     if data_count >= max_data:
-                        print(f"Pengambilan Data Selesai")
-                        break
+                        print(f"Pengambilan Data {ssid} Selesai")
+                    break
             else:
                 print(f"Tidak dapat menemukan {ssid}")
                 stop_event.set()  # Set stop_event jika SSID tidak ditemukan
                 break
-        
 
+        result_queue.put(distances)
+        
         # # Jika semua data telah dikumpulkan, lakukan trilaterasi
         # if len(beacons) == max_data:
         #     user_position = trilateration(beacons, distances)
@@ -180,28 +181,34 @@ def scan_wifi_rssi(ssid, outputRSSI, outputJarak, outputKalmanFilter, outputN, m
         print("Dihentikan oleh pengguna (Ctrl+C)")
 
 if __name__ == "__main__":
-    target_ssids = ["UIIConnect", "eduroam"]  # Ganti dengan daftar SSID yang ingin Anda lacak
-    max_data = 2
+    target_ssids = ["RuijieAP1", "RuijieAP2"]  # Ganti dengan daftar SSID yang ingin Anda lacak
+    max_data = 10
 
     # Event untuk menghentikan proses jika SSID tidak ditemukan
     stop_event = Event()
 
     processes = []
+    distances_list = []  # List untuk menampung distances dari setiap proses
+    result_queue = Queue()  # Objek Queue untuk menyimpan nilai distances dari setiap proses
     for ssid in target_ssids:
         outputRSSI = f"outputRSSI_{ssid}.txt"
         outputJarak = f"outputJarak_{ssid}.txt"
         outputKalmanFilter = f"outputKF_{ssid}.txt"
         outputN = f"outputN_{ssid}.txt"
-        process = Process(target=scan_wifi_rssi, args=(ssid, outputRSSI, outputJarak, outputKalmanFilter, outputN, max_data, stop_event))
+        process = Process(target=scan_wifi_rssi, args=(ssid, outputRSSI, outputJarak, outputKalmanFilter, outputN, max_data, stop_event, result_queue))
         processes.append(process)
         process.start()
-        print (processes)
 
     # Tunggu proses selesai
     for process in processes:
         process.join()
-        
-    print("KELARRR")
+        distances = result_queue.get()  # Mengambil nilai distances dari queue
+        distances_list.append(distances)  # Menambahkan nilai distances ke dalam list
+
+    # distances_list sekarang berisi nilai distances dari setiap proses
+    for ssid, distances in zip(target_ssids, distances_list):
+        print(f"Distances untuk {ssid}: {distances}")
+
     # Cek apakah SSID tidak ditemukan
     if stop_event.is_set():
         print("Scanning dihentikan karena salah satu SSID tidak ditemukan.")
