@@ -7,21 +7,21 @@ import numpy as np
 from multiprocessing import Process, Event, Manager
 
 reference_rssi_dict = {
-    "RuijieAP1": -31.24,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
-    "RuijieAP2": -28.80,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
-    "RuijieAP3": -32.70,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
+    "RuijieAP1": -29,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "RuijieAP2": -25,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP3": -23,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
 }
 
 n_dict = {
-    "RuijieAP1": 1.75,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
-    "RuijieAP2": 1.75,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
-    "RuijieAP3": 1.6,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
+    "RuijieAP1": 3.21,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "RuijieAP2": 2.83,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP3": 3.82,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
 }
     
 beacon_positions = {
     "RuijieAP1": np.array([0, 0]),
-    "RuijieAP2": np.array([0, -6.3]),
-    "RuijieAP3": np.array([5.9, -6.3])
+    "RuijieAP2": np.array([5.76, 0]),
+    "RuijieAP3": np.array([5.76, 5.16])
 }
 
 # Inisialisasi Filter Kalman
@@ -139,7 +139,7 @@ def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, s
                     print(f"{data_count+1}.RSSI {ssid} = {rssi} dBm")
 
                     # Fungsi untuk mendapatkan nilai jarak TANPA Kalman Filter
-                    distance = calculate_distance(rssi, ssid, 1.6)
+                    distance = calculate_distance(rssi, ssid, ssid)
                     with open(outputJarak, "a") as file:
                         file.write(f" Jarak {ssid} = {distance} meter\n")
                     print(f"Jarak {ssid} = {distance} meter")
@@ -194,8 +194,8 @@ def scan_N(ssid, outputRSSI, outputN, max_data, stop_event, jarak):
                     # Fungsi Calculate Path Loss Exponent
                     nValue = calculate_path_loss_exponent(rssi,ssid,jarak)
                     with open(outputN, "a") as file:
-                        file.write(f"N-{ssid}-4m = {nValue}\n")
-                    print(f"N-{ssid}-4m = {nValue}")
+                        file.write(f"N-{ssid}-{jarak}m = {nValue}\n")
+                    print(f"N-{ssid}-{jarak}m = {nValue}")
                     
                     data_count += 1  # Menambah jumlah data yang diambil
                     
@@ -246,11 +246,52 @@ def scan_rssi(ssid, outputRSSI, max_data, stop_event):
     except KeyboardInterrupt:
         print("Dihentikan oleh pengguna (Ctrl+C)")
 
+def scan_distance(ssid, outputRSSI, outputJarak, max_data, stop_event):
+    wifi = pywifi.PyWiFi()
+    iface = wifi.interfaces()[0]  # Menggunakan antarmuka pertama (biasanya wlan0)
+
+    try:
+        # Inisialisasi hitungan data yang diambil
+        data_count = 0
+
+        while data_count < max_data and not stop_event.is_set():
+            iface.scan()
+            time.sleep(2)
+            scan_results = iface.scan_results()
+
+            for result in scan_results:
+                if ssid in result.ssid:
+                    # Fungsi untuk mendapatkan nilai RSSI
+                    rssi = result.signal
+                    with open(outputRSSI, "a") as file:
+                        file.write(f"RSSI {ssid} = {rssi} dBm\n")
+                    print(f"{data_count+1}.RSSI {ssid} = {rssi} dBm")
+
+                    # Fungsi untuk mendapatkan nilai jarak TANPA Kalman Filter
+                    distance = calculate_distance(rssi, ssid, ssid)
+                    with open(outputJarak, "a") as file:
+                        file.write(f" Jarak {ssid} = {distance} meter\n")
+                    print(f"Jarak {ssid} = {distance} meter")
+                    
+                    # Menambah jumlah data yang diambil
+                    data_count += 1  
+                    
+                    if data_count >= max_data:
+                        print(f"Pengambilan Data {ssid} Selesai")
+                    break
+            else:
+                print(f"Tidak dapat menemukan {ssid}")
+                # Set stop_event jika SSID tidak ditemukan
+                stop_event.set()  
+                break
+
+    except KeyboardInterrupt:
+        print("Dihentikan oleh pengguna (Ctrl+C)")
 
 if __name__ == "__main__":
     # Ganti dengan daftar SSID yang ingin Anda lacak
-    target_ssids = ["RuijieAP1", "RuijieAP2", "RuijieAP3"]
-    max_data = 3
+    target_ssids = ["RuijieAP1","RuijieAP2","RuijieAP3"]
+    max_data = 200
 
     # Event untuk menghentikan proses jika SSID tidak ditemukan
     stop_event = Event()
@@ -265,6 +306,7 @@ if __name__ == "__main__":
     print("1. Mencari Titik Lokasi (+Kalman Filter)")
     print("2. Mencari Nilai N (Path Loss Exponent)")
     print("3. Mencari Nilai RSSI")
+    print("4. Mencari Nilai Jarak ke 1 AP")
 
     pilihan = float(input("Masukkan Pilihan Anda: "))
 
@@ -317,13 +359,16 @@ if __name__ == "__main__":
         def calculateDistance(x1,y1,x2,y2):  
             dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)  
             return dist
-        print("distance between calculated and setup coordinates=", calculateDistance(0, 1.92, x, y) ) 
+        
+        titikX= 3.94
+        titikY= 4.09
+        print("distance between calculated and setup coordinates=", calculateDistance(titikX, titikY, x, y) ) 
     
     elif pilihan == 2:
         jarak = float(input("Masukkan Jarak Lokasi ke AP: "))
         for ssid in target_ssids:
-            outputRSSI = f"outputRSSI_{ssid}.txt"
-            outputN = f"outputN_{ssid}.txt"
+            outputRSSI = f"outputRSSI_{ssid}_{jarak}m.txt"
+            outputN = f"outputN_{ssid}_{jarak}m.txt"
             process = Process(target=scan_N, args=(ssid, outputRSSI, outputN, max_data, stop_event, jarak))
             processes.append(process)
             process.start()
@@ -340,6 +385,22 @@ if __name__ == "__main__":
         for ssid in target_ssids:
             outputRSSI = f"outputRSSI_{ssid}.txt"
             process = Process(target=scan_rssi, args=(ssid, outputRSSI, max_data, stop_event))
+            processes.append(process)
+            process.start()
+
+        # Tunggu proses selesai
+        for process in processes:
+            process.join()
+
+        # Cek apakah SSID tidak ditemukan
+        if stop_event.is_set():
+            print("Scanning dihentikan karena salah satu SSID tidak ditemukan.")
+
+    elif pilihan == 4:
+        for ssid in target_ssids:
+            outputRSSI = f"outputRSSI_{ssid}.txt"
+            outputJarak = f"outputJarak_{ssid}.txt"
+            process = Process(target=scan_distance, args=(ssid, outputRSSI, outputJarak, max_data, stop_event))
             processes.append(process)
             process.start()
 
