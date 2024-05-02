@@ -8,8 +8,8 @@ Detail Access Point yang digunakan:
 Ruijie RG-EW1200
 Jaringan 2.4Ghz
 
-Tinggi Wifi: ...
-Tinggi Laptop: ...
+Tinggi Wifi (cm): 48, 48, 48
+Tinggi Laptop (cm): 48
 
 Bentuk Ruangan:
             3,06m
