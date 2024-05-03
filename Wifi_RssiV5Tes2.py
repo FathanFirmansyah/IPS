@@ -1,13 +1,14 @@
-#Penggunaan Plotting data ke image
+# Penggunaan Lock untuk akses CSV
 import time
 import pywifi
 import math
 from math import sin, cos, sqrt, atan2, radians, pi
 from filterpy.kalman import KalmanFilter
 import numpy as np
-from multiprocessing import Process, Event, Manager
+from multiprocessing import Process, Event, Manager, Lock
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import csv
 
 reference_rssi_dict = {
     "UIIConnect": -29,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
@@ -119,7 +120,7 @@ def trilateration(ssid1,rAP1,ssid2,rAP2,ssid3,rAP3):
     y = (C*D - A*F) / (B*D - A*E)
     return x,y
 
-def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, stop_event, result_dict):
+def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, stop_event, result_dict, lock):
     wifi = pywifi.PyWiFi()
     iface = wifi.interfaces()[0]  # Menggunakan antarmuka pertama (biasanya wlan0)
 
@@ -132,7 +133,7 @@ def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, s
             iface.scan()
             time.sleep(2)
             scan_results = iface.scan_results()
-
+            
             for result in scan_results:
                 if ssid in result.ssid:
                     # Fungsi untuk mendapatkan nilai RSSI
@@ -149,9 +150,11 @@ def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, s
 
                     # Fungsi untuk menghitung jarak device ke AP yang sudah menggunakan kalman filter
                     distanceKalman = calculate_distanceKalman(rssi, ssid, ssid, data_count)
-                    with open(outputKalmanFilter, "a") as file:
-                        file.write(f"KF {ssid} = {distanceKalman:.4f} meter\n")
-                    print(f"KF {ssid} = {distanceKalman:.4f} meter")
+                    # with lock:  # Menggunakan lock untuk mengamankan akses ke file CSV
+                    #     with open(outputKalmanFilter, "a", newline='') as file:
+                    #         writer = csv.writer(file)
+                    #         writer.writerow([f"KF {ssid}", distanceKalman])
+                    #     print(f"KF {ssid} = {distanceKalman:.4f} meter")
 
                     distances.append(distanceKalman)
                     
@@ -172,6 +175,7 @@ def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, s
     
     except KeyboardInterrupt:
         print("Dihentikan oleh pengguna (Ctrl+C)")
+
 
 def scan_N(ssid, outputRSSI, outputN, max_data, stop_event, jarak):
     wifi = pywifi.PyWiFi()
@@ -306,7 +310,6 @@ if __name__ == "__main__":
     # Ganti dengan daftar SSID yang ingin Anda lacak
     target_ssids = ["UIIConnect","eduroam","UIIGuest"]
     max_data = 1
-
     # Event untuk menghentikan proses jika SSID tidak ditemukan
     stop_event = Event()
     manager = Manager()
@@ -315,6 +318,8 @@ if __name__ == "__main__":
     # Dictionary untuk menyimpan array berdasarkan SSID
     array_dict = {}
     processes = []
+    # Inisialisasi objek Lock
+    lock = Lock()
 
     print("Daftar Pilihan:")
     print("1. Mencari Titik Lokasi (+Kalman Filter)")
@@ -325,12 +330,17 @@ if __name__ == "__main__":
     pilihan = float(input("Masukkan Pilihan Anda: "))
 
     if pilihan == 1:
+
+        outputKalmanFilter = f"outputKF.csv"
+        with open(outputKalmanFilter, 'w') as csv_file:
+            csv_writer = csv.DictWriter(csv_file, fieldnames=target_ssids)
+            csv_writer.writeheader()
         
         for ssid in target_ssids:
             outputRSSI = f"outputRSSI_{ssid}.csv"
             outputJarak = f"outputJarak_{ssid}.csv"
-            outputKalmanFilter = f"outputKF_{ssid}.csv"
-            process = Process(target=scan_location, args=(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, stop_event, result_dict))
+            
+            process = Process(target=scan_location, args=(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, stop_event, result_dict,lock))
             processes.append(process)
             process.start()
 

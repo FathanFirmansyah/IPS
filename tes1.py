@@ -1,3 +1,4 @@
+#Digunakan untuk melakukan plotting data pada image
 import numpy as np
 import matplotlib.pyplot as plt
 

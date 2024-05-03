@@ -1,0 +1,8 @@
+Tahapan Besar:
+1. tulis data tiap ap ke satu file csv (done)
+2. baca file csv perbaris dan lakukan trilaterasi
+3. plotting trilaterasi
+
+Langkah menghindari multiprocessing:
+1. Ubah Agar Tanpa Multiprocessing saat get rssi (done)
+2. Kalman menjadi ada 3 untuk masing-masing AP (done)

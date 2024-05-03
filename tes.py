@@ -1,3 +1,4 @@
+# Cara melakukan plotting data dan pembentukan ruangan
 import numpy as np
 import matplotlib.pyplot as plt
 
