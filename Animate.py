@@ -123,8 +123,9 @@ def animate(i):
             plt.plot([A[0], B[0]], [A[1], B[1]], marker='o', label='Line Segment AB',color='green')
             plt.plot([C[0], D[0]], [C[1], D[1]], marker='o', label='Line Segment CD',color='green')
 
-            plt.scatter(xKF, yKF, label='Prediksi Kalman', color='blue')  # Menggunakan plt.scatter() untuk memplot titik-titik
+            plt.scatter(xKF, yKF, label='Prediksi Histori Kalman', color='blue')  # Menggunakan plt.scatter() untuk memplot titik-titik
             plt.scatter(x, y, label='Prediksi Tanpa Kalman', color='red')  # Menggunakan plt.scatter() untuk memplot titik-titik
+            plt.scatter(dataKF['x'].iloc[-1], dataKF['y'].iloc[-1], label='Prediksi Kalman Sekarang', color='black')  # Menggunakan plt.scatter() untuk memplot titik-titik
 
             plt.legend(loc='upper left')
             plt.tight_layout()
