@@ -1,0 +1,10 @@
+RSSI RuijieAP2 = -37 dBm
+RSSI RuijieAP2 = -44 dBm
+RSSI RuijieAP2 = -38 dBm
+RSSI RuijieAP2 = -54 dBm
+RSSI RuijieAP2 = -39 dBm
+RSSI RuijieAP2 = -43 dBm
+RSSI RuijieAP2 = -35 dBm
+RSSI RuijieAP2 = -47 dBm
+RSSI RuijieAP2 = -35 dBm
+RSSI RuijieAP2 = -46 dBm

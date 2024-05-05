@@ -1,0 +1,10 @@
+RSSI RuijieAP3 = -40 dBm
+RSSI RuijieAP3 = -46 dBm
+RSSI RuijieAP3 = -39 dBm
+RSSI RuijieAP3 = -47 dBm
+RSSI RuijieAP3 = -40 dBm
+RSSI RuijieAP3 = -48 dBm
+RSSI RuijieAP3 = -40 dBm
+RSSI RuijieAP3 = -47 dBm
+RSSI RuijieAP3 = -41 dBm
+RSSI RuijieAP3 = -48 dBm

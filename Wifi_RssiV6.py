@@ -242,7 +242,7 @@ def ambilData(ssid,lock,outputTrilaterasi,kolom):
             }
             csv_writer.writerow(info)
 
-def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, stop_event, result_dict, lock, outputTrilaterasiKF,kolom,outputTrilaterasi):
+def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, stop_event, lock, outputTrilaterasiKF,kolom,outputTrilaterasi):
     wifi = pywifi.PyWiFi()
     iface = wifi.interfaces()[0]  # Menggunakan antarmuka pertama (biasanya wlan0)
 
@@ -260,7 +260,7 @@ def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, s
         countKFAP1=0
         countKFAP2=0
         countKFAP3=0
-        while data_count <= max_data and not stop_event.is_set():
+        while not stop_event.is_set():
             # Menambah jumlah data yang diambil
             data_count += 1
             iface.scan()
@@ -357,9 +357,9 @@ def scan_location(ssid, outputRSSI, outputJarak, outputKalmanFilter, max_data, s
                         csv_writer.writerow(info)
                 ambilDataKF(ssid,lock,outputTrilaterasiKF,kolom)
                 ambilData(ssid,lock,outputTrilaterasi,kolom)
-            if countAP1 == 1 and countAP2 == 1 and countAP3 == 1 and data_count >= max_data:
-                print(f"Pengambilan Data Selesai")
-                exit()    
+            # if countAP1 == 1 and countAP2 == 1 and countAP3 == 1 and data_count >= max_data:
+            #     print(f"Pengambilan Data Selesai")
+            #     exit()    
     except KeyboardInterrupt:
         print("Dihentikan oleh pengguna (Ctrl+C)")
 
@@ -484,12 +484,9 @@ def scan_distance(ssid, outputRSSI, outputJarak, max_data, stop_event):
 if __name__ == "__main__":
     # Ganti dengan daftar SSID yang ingin Anda lacak
     target_ssids = ["RuijieAP1","RuijieAP2","RuijieAP3"]
-    max_data = 1000000000000
     # Event untuk menghentikan proses jika SSID tidak ditemukan
     stop_event = Event()
     manager = Manager()
-    # Membuat dictionary untuk result jarak
-    result_dict = manager.dict()
     # Dictionary untuk menyimpan array berdasarkan SSID
     array_dict = {}
     processes = []
@@ -530,10 +527,11 @@ if __name__ == "__main__":
         
         outputRSSI = f"outputRSSI.csv"
 
-        scan_location(target_ssids,outputRSSI,outputJarak,outputKalmanFilter,max_data,stop_event,result_dict,lock,outputTrilaterasiKF,kolom,outputTrilaterasi)
+        scan_location(target_ssids,outputRSSI,outputJarak,outputKalmanFilter,stop_event,lock,outputTrilaterasiKF,kolom,outputTrilaterasi)
 
 
     elif pilihan == 2:
+        max_data = 100
         jarak = float(input("Masukkan Jarak Lokasi ke AP: "))
         for ssid in target_ssids:
             outputRSSI = f"outputRSSI_{ssid}_{jarak}m.txt"
@@ -551,6 +549,7 @@ if __name__ == "__main__":
             print("Scanning dihentikan karena salah satu SSID tidak ditemukan.")
     
     elif pilihan == 3:
+        max_data = 200
         for ssid in target_ssids:
             outputRSSI = f"outputRSSI_{ssid}.txt"
             process = Process(target=scan_rssi, args=(ssid, outputRSSI, max_data, stop_event))
@@ -566,6 +565,7 @@ if __name__ == "__main__":
             print("Scanning dihentikan karena salah satu SSID tidak ditemukan.")
 
     elif pilihan == 4:
+        max_data = 100
         for ssid in target_ssids:
             outputRSSI = f"outputRSSI_{ssid}.txt"
             outputJarak = f"outputJarak_{ssid}.txt"

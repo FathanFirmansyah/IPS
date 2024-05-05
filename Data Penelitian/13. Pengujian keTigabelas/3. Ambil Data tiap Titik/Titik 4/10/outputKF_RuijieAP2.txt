@@ -1,0 +1,10 @@
+KF RuijieAP2 = 1.0722 meter
+KF RuijieAP2 = 1.4422 meter
+KF RuijieAP2 = 1.6830 meter
+KF RuijieAP2 = 1.9206 meter
+KF RuijieAP2 = 2.0339 meter
+KF RuijieAP2 = 2.1107 meter
+KF RuijieAP2 = 2.2255 meter
+KF RuijieAP2 = 2.2364 meter
+KF RuijieAP2 = 2.2434 meter
+KF RuijieAP2 = 2.1834 meter

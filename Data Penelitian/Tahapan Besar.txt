@@ -5,9 +5,11 @@ Tahapan Besar:
 4. Buat bagimana caranya 1 kali run, tapi plotting dan trilaterasi bisa berjalan bersama (done)
 5. Buat agar variabel Inisialisasi Kalman terpisah masing-masing AP (done)
 6. Buat trilaterasi tanpa kalman untuk perbandingan hasil (done)
-7. buat dalam bentuk aplikasi kalau bisa hehehehehe
-8. cari cara agar tidak perlu max data saat pilih no1
+7. cari cara agar tidak perlu max data saat pilih no1 (done)
+8. cari cara menghitung error (done)
+9. buat dalam bentuk aplikasi kalau bisa hehehehehe (Tidak bisa ternyata wkwkwk)
 
 Langkah menghindari multiprocessing:
 1. Ubah Agar Tanpa Multiprocessing saat get rssi (done)
 2. Kalman menjadi ada 3 untuk masing-masing AP (done)
+

@@ -1,0 +1,1 @@
+RSSI RuijieAP3 = -38 dBm
