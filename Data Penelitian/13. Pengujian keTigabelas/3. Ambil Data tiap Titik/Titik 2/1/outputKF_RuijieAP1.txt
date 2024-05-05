@@ -1,1 +1,0 @@
-KF RuijieAP1 = 1.1543 meter

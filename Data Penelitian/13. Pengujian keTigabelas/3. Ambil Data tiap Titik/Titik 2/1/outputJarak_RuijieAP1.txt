@@ -1,1 +1,0 @@
- Jarak RuijieAP1 = 1.6522225141816356 meter

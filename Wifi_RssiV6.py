@@ -28,8 +28,8 @@ except ImportError as e:
 
 reference_rssi_dict = {
     "RuijieAP1": -29,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
-    "RuijieAP2": -25,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
-    "RuijieAP3": -23,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
+    "RuijieAP2": -18,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP3": -21,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
 }
 
 n_dict = {
