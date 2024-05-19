@@ -1,0 +1,5 @@
+1. Ambil nilai rata-rata RSSI dari tiap AP, jarak 1 meter, 200 data/AP
+2. Cari nilai N Path Loss untuk tiap AP (jarak 2,3,4 meter) masing-masing 100 data
+3. Update code untuk nilai N agar sesuai dengan AP yang digunakan
+4. Pengetesan titik diam
+5. Pengetesan sambil berjalan dari titik-ke titik (bolak-balik)

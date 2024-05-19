@@ -27,21 +27,21 @@ except ImportError as e:
     exit(1)
 
 reference_rssi_dict = {
-    "RuijieAP1": -29,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
-    "RuijieAP2": -18,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP1": -24,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "RuijieAP2": -33,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
     "RuijieAP3": -21,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
 }
 
 n_dict = {
-    "RuijieAP1": 3.21,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
-    "RuijieAP2": 2.83,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
-    "RuijieAP3": 3.82,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
+    "RuijieAP1": 1.68,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "RuijieAP2": 1.11,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP3": 3.42,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
 }
     
 beacon_positions = {
     "RuijieAP1": np.array([0, 0]),
-    "RuijieAP2": np.array([5.76, 0]),
-    "RuijieAP3": np.array([5.76, 5.16])
+    "RuijieAP2": np.array([2.14, 3.06]),
+    "RuijieAP3": np.array([5.76, 3.06])
 }
 
 # Inisialisasi Filter Kalman
@@ -373,7 +373,7 @@ def scan_N(ssid, outputRSSI, outputN, max_data, stop_event, jarak):
 
         while data_count < max_data and not stop_event.is_set():
             iface.scan()
-            time.sleep(2)
+            time.sleep(0.5)
             scan_results = iface.scan_results()
 
             for result in scan_results:
@@ -381,7 +381,7 @@ def scan_N(ssid, outputRSSI, outputN, max_data, stop_event, jarak):
                     # Fungsi untuk mendapatkan nilai RSSI
                     rssi = result.signal
                     with open(outputRSSI, "a") as file:
-                        file.write(f"RSSI {ssid} = {rssi} dBm\n")
+                        file.write(f"RSSI {ssid} = {rssi} \n")
                     print(f"{data_count+1}.RSSI {ssid} = {rssi} dBm")
 
                     # Fungsi Calculate Path Loss Exponent
@@ -413,7 +413,7 @@ def scan_rssi(ssid, outputRSSI, max_data, stop_event):
 
         while data_count < max_data and not stop_event.is_set():
             iface.scan()
-            time.sleep(2)
+            time.sleep(0.5)
             scan_results = iface.scan_results()
 
             for result in scan_results:
@@ -421,7 +421,7 @@ def scan_rssi(ssid, outputRSSI, max_data, stop_event):
                     # Fungsi untuk mendapatkan nilai RSSI
                     rssi = result.signal
                     with open(outputRSSI, "a") as file:
-                        file.write(f"RSSI {ssid} = {rssi} dBm\n")
+                        file.write(f"RSSI {ssid} = {rssi} \n")
                     print(f"{data_count+1}.RSSI {ssid} = {rssi} dBm")
                     
                     # Menambah jumlah data yang diambil
@@ -449,7 +449,7 @@ def scan_distance(ssid, outputRSSI, outputJarak, max_data, stop_event):
 
         while data_count < max_data and not stop_event.is_set():
             iface.scan()
-            time.sleep(2)
+            time.sleep(0.5)
             scan_results = iface.scan_results()
 
             for result in scan_results:
@@ -457,13 +457,13 @@ def scan_distance(ssid, outputRSSI, outputJarak, max_data, stop_event):
                     # Fungsi untuk mendapatkan nilai RSSI
                     rssi = result.signal
                     with open(outputRSSI, "a") as file:
-                        file.write(f"RSSI {ssid} = {rssi} dBm\n")
+                        file.write(f"RSSI {ssid} = {rssi} \n")
                     print(f"{data_count+1}.RSSI {ssid} = {rssi} dBm")
 
                     # Fungsi untuk mendapatkan nilai jarak TANPA Kalman Filter
                     distance = calculate_distance(rssi, ssid, ssid)
                     with open(outputJarak, "a") as file:
-                        file.write(f" Jarak {ssid} = {distance} meter\n")
+                        file.write(f" Jarak {ssid} = {distance} \n")
                     print(f"Jarak {ssid} = {distance} meter")
                     
                     # Menambah jumlah data yang diambil

@@ -49,12 +49,12 @@ def animate(i):
             plt.cla()
 
             # Gambar persegi panjang
-            plt.plot([0, 5.76, 5.76, 2.15, 2.15, 0, 0], [0, 0, 5.16, 5.16, 3.06, 3.06, 0])
+            plt.plot([0, 5.76, 5.76, 2.14, 2.14, 0, 0], [0, 0, 5.16, 5.16, 3.06, 3.06, 0])
 
             A = [0, 1.53]
-            B = [3.94, 1.53]
-            C = [3.94, 1.53]
-            D = [3.94, 4.09]
+            B = [3.95, 1.53]
+            C = [3.95, 1.53]
+            D = [3.95, 4.10]
             EKf = [dataKF['x'].iloc[-1], dataKF['y'].iloc[-1]]
             E = [data['x'].iloc[-1], data['y'].iloc[-1]]
 
@@ -126,6 +126,10 @@ def animate(i):
             plt.scatter(xKF, yKF, label='Prediksi Histori Kalman', color='blue')  # Menggunakan plt.scatter() untuk memplot titik-titik
             plt.scatter(x, y, label='Prediksi Tanpa Kalman', color='red')  # Menggunakan plt.scatter() untuk memplot titik-titik
             plt.scatter(dataKF['x'].iloc[-1], dataKF['y'].iloc[-1], label='Prediksi Kalman Sekarang', color='black')  # Menggunakan plt.scatter() untuk memplot titik-titik
+
+            plt.scatter(0, 0, label = "AP1", color = 'orange')
+            plt.scatter(2.14, 3.06, label = "AP2", color = 'yellow')
+            plt.scatter(5.76, 3.06, label = "AP3", color = 'purple')    
 
             plt.legend(loc='upper left')
             plt.tight_layout()
