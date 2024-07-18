@@ -27,21 +27,43 @@ except ImportError as e:
     exit(1)
 
 reference_rssi_dict = {
-    "RuijieAP1": -24,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
-    "RuijieAP2": -33,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
-    "RuijieAP3": -21,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
+    "RuijieAP1": -23,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "RuijieAP2": -19,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP3": -20,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
 }
 
 n_dict = {
-    "RuijieAP1": 1.68,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
-    "RuijieAP2": 1.11,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
-    "RuijieAP3": 3.42,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
+    "RuijieAP1": 3.34,  # RSSI pada jarak referensi untuk SSID RuijieAP1 (dalam dBm)
+    "RuijieAP2": 2.50,  # RSSI pada jarak referensi untuk SSID RuijieAP2 (dalam dBm)
+    "RuijieAP3": 4.97,   # RSSI pada jarak referensi untuk SSID RuijieAP3 (dalam dBm)
 }
-    
+
+# # Ruang 1, Posisi 1
+# beacon_positions = {
+#     "RuijieAP1": [0, 0],
+#     "RuijieAP2": [5.76, 0],
+#     "RuijieAP3": [5.76, 5.16]
+# }
+
+# # Ruang 1, Posisi 2
+# beacon_positions = {
+#     "RuijieAP1": [0, 0],
+#     "RuijieAP2": [2.14, 3.06],
+#     "RuijieAP3": [5.76, 3.06]
+# }
+
+# # Ruang 2, Posisi 1
+# beacon_positions = {
+#     "RuijieAP1": [2.90, 0],
+#     "RuijieAP2": [0, 3.61],
+#     "RuijieAP3": [2.90, 7.22]
+# }
+
+# Ruang 2, Posisi 2
 beacon_positions = {
-    "RuijieAP1": np.array([0, 0]),
-    "RuijieAP2": np.array([2.14, 3.06]),
-    "RuijieAP3": np.array([5.76, 3.06])
+    "RuijieAP1": [2.90, 0],
+    "RuijieAP2": [1.45, 3.61],
+    "RuijieAP3": [1.45, 7.22]
 }
 
 # Inisialisasi Filter Kalman
@@ -456,8 +478,6 @@ def scan_distance(ssid, outputRSSI, outputJarak, max_data, stop_event):
                 if ssid in result.ssid:
                     # Fungsi untuk mendapatkan nilai RSSI
                     rssi = result.signal
-                    with open(outputRSSI, "a") as file:
-                        file.write(f"RSSI {ssid} = {rssi} \n")
                     print(f"{data_count+1}.RSSI {ssid} = {rssi} dBm")
 
                     # Fungsi untuk mendapatkan nilai jarak TANPA Kalman Filter

@@ -1,0 +1,14 @@
+ Jarak RuijieAP1 = 1.5378567664623777 meter
+ Jarak RuijieAP1 = 5.206080790593064 meter
+ Jarak RuijieAP1 = 3.637036533920673 meter
+ Jarak RuijieAP1 = 6.009193646244876 meter
+ Jarak RuijieAP1 = 3.9075119200263218 meter
+ Jarak RuijieAP1 = 11.4601428508606 meter
+ Jarak RuijieAP1 = 2.7298392363686848 meter
+ Jarak RuijieAP1 = 4.8457193276590305 meter
+ Jarak RuijieAP1 = 3.637036533920673 meter
+ Jarak RuijieAP1 = 8.006206570563348 meter
+ Jarak RuijieAP1 = 6.936198213312049 meter
+ Jarak RuijieAP1 = 9.241279109860411 meter
+ Jarak RuijieAP1 = 8.006206570563348 meter
+ Jarak RuijieAP1 = 6.936198213312049 meter

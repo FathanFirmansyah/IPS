@@ -1,0 +1,1 @@
+RSSI RuijieAP1 = -37 dBm

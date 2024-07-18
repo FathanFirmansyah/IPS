@@ -1,0 +1,6 @@
+1. Ambil nilai rata-rata RSSI dari tiap AP, jarak 1 meter, 200 data/AP
+2. Cari nilai N Path Loss untuk tiap AP (jarak 2,3,4 meter) masing-masing 100 data
+3. Update code untuk nilai N agar sesuai dengan AP yang digunakan
+4. Ambil nilai-nilai jarak untuk pengetesan Trilaterasi
+5. Pengetesan hasil trilaterasi menggunakan 1 data, 10 data, 20 data, 40 data, 80 data
+6. Pengetesan sambil berjalan dari titik-ke titik, tiap langkah 10 detik (bolak-balik)

@@ -1,0 +1,35 @@
+10-05-2024 / 13:21
+
+Detail Laptop yang digunakan:
+MSI GL65 Leopard 10SDK, Inter Core i7 10750H
+Intel(R) Wi-Fi 6 AX201 160MHz
+
+Detail Access Point yang digunakan:
+Ruijie RG-EW1200
+Jaringan 2.4Ghz
+
+Tinggi Wifi (cm): 48, 48, 48
+Tinggi Laptop (cm): 48
+
+Bentuk Ruangan:
+             2,90m
+        ---------------
+        -         AP3 -
+        -      *      -
+        -             -
+        -             -
+        -             -
+        - AP2  *      -
+7,22m   - 	      -
+        -	      -
+        -             - 
+        -	      -
+        -      *      -
+        -         AP1 -
+        ---------------
+      0,0    2,90m
+
+x,y
+*1 =
+*2 =
+*3 =
