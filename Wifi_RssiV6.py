@@ -67,11 +67,11 @@ beacon_positions = {
 }
 
 # Inisialisasi Filter Kalman
-kfAP1 = KalmanFilter(dim_x=1, dim_z=1)
-kfAP1.F = np.array([[1.0]])  # Matriks transisi
-kfAP1.H = np.array([[1.0]])  # Matriks pengukuran
-kfAP1.R = 5  # Kovariansi pengukuran (dalam contoh ini, disesuaikan dengan skala pengukuran)
-kfAP1.P = np.eye(1)  # Matriks kovariansi awal (dalam contoh ini, matriks identitas)
+kfAP1 = KalmanFilter(dim_x=1, dim_z=1) # (Anda hanya melacak satu nilai kekuatan sinyal (RSSI) dari setiap AP.)
+kfAP1.F = np.array([[1.0]])  # Matriks transisi (Menganggap kekuatan sinyal tidak berubah sendiri.)
+kfAP1.H = np.array([[1.0]])  # Matriks pengukuran (Pengukuran adalah nilai langsung dari RSSI yang kita prediksi.)
+kfAP1.R = 5  # Kovariansi pengukuran (Menyatakan pengukuran sinyal bisa memiliki variasi atau kebisingan.)
+kfAP1.P = np.eye(1)  # Matriks kovariansi awal (Kita memulai dengan asumsi awal bahwa kita memiliki ketidakpastian tertentu terhadap nilai RSSI yang pertama kali kita terima.)
 
 kfAP2 = KalmanFilter(dim_x=1, dim_z=1)
 kfAP2.F = np.array([[1.0]])  # Matriks transisi
